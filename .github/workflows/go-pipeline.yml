@@ -27,3 +27,5 @@ jobs:
           cat $LOGIN_FILE
         env:
           LOGIN_FILE: upload/DomainServer
+      - name: Print the secret value from file
+        run: cat upload/DomainServer
