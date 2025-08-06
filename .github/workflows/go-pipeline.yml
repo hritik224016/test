@@ -16,7 +16,7 @@ jobs:
       - name: Recreate secret file from base64
         run: |
           mkdir -p upload
-          echo "${{ secrets.DOMAIN_SERVER_DETAILS }}" | base64 -d > upload/DomainServer
+          echo "${{ secrets.DOMAIN_SERVER_DETAILS }}" > upload/DomainServer
 
       - name: Run Playwright tests
         run: |
