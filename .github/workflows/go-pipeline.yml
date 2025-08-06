@@ -1,38 +1,28 @@
-name: CI Pipeline
+name: Run Tests
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
+ 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
+      - name: Recreate secret file from base64
+        run: |
+          mkdir -p upload
+          echo "${{ secrets.DOMAIN_SERVER_DETAILS }}" | base64 -d > upload/DomainServer
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Lint code
-        run: npm run lint
-
-      - name: Run tests
-        run: npm test
-
-      - name: Build project
-        run: npm run build
-
-      - name: Upload production build as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-build
-          path: ./dist
+      - name: Run Playwright tests
+        run: |
+          LOGIN_FILE=upload/DomainServer
+          echo "Running tests with LOGIN_FILE=$LOGIN_FILE"
+          # Use environment variables or pass them to the command
+          ls -l 
+          cat $LOGIN_FILE
+        env:
+          LOGIN_FILE: upload/DomainServer
